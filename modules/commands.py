@@ -8,7 +8,7 @@ from modules.core import Bot, closeness
 async def search(inter: discord.Interaction, current: str) -> list[discord.app_commands.Choice[str]]:
     matches = sorted(
         list({message.content[:100] async for message in inter.channel.pins(limit=None)
-              if closeness(current.lower(), message.content.lower())}),
+              if message.content and closeness(current.lower(), message.content.lower())}),
         key=lambda c: -closeness(current.lower(), c.lower())
     )
     return [discord.app_commands.Choice(name=g, value=g) for g in matches][:25]
