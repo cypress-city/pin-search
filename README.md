@@ -1,4 +1,4 @@
-# discord-bot-template
+# pin-search
 A Discord bot for searching through large lists of pinned messages.
 
 ## Setup
