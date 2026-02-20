@@ -17,7 +17,7 @@ class Bot(commands.Bot):  # main bot class
         intents = discord.Intents.default()
         intents.message_content = True
         super().__init__(
-            intents=intents, command_prefix="!",
+            intents=intents, command_prefix="ps!",
             allowed_contexts=discord.app_commands.AppCommandContext(guild=True, dm_channel=True, private_channel=True),
             allowed_installs=discord.app_commands.AppInstallationType(guild=True, user=True)
         )
