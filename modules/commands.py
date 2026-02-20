@@ -31,7 +31,10 @@ class PinsCog(commands.Cog):
     async def search_command(self, inter: discord.Interaction, query: str):
         if matches := [m async for m in inter.channel.pins(limit=None) if m.content[:100] == query]:
             most_recent = sorted(matches, key=lambda m: m.created_at)[-1]
-            response = await inter.response.send_message(f"Retrieved message: {most_recent.jump_url}")
+            response = await inter.response.send_message(
+                f"{most_recent.content[:20]}{'...' if len(most_recent.content) > 20 else ''}: "
+                f"{most_recent.jump_url}"
+            )
             try:
                 await most_recent.forward(inter.channel)
             except discord.HTTPException as e:
