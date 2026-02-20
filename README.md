@@ -1,5 +1,5 @@
 # discord-bot-template
-Bare minimum Discord bot written in discord.py.
+A Discord bot for searching through large lists of pinned messages.
 
 ## Setup
 1. Create a `.env` file in the main directory with the token for your Discord application:

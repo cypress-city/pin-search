@@ -2,7 +2,14 @@ import discord
 from discord.ext import commands
 
 
-_COGS = []
+_COGS = [
+    "modules.admin",
+    "modules.commands"
+]
+
+
+def closeness(search_term: str, match: str) -> int:
+    return 2 if match.startswith(search_term) else 1 if search_term in match else 0
 
 
 class Bot(commands.Bot):  # main bot class
