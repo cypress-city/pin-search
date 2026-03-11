@@ -2,13 +2,13 @@ import asyncio
 import discord
 from discord.ext import commands
 
-from modules.core import Bot, closeness
+from modules.core import Bot, closeness, get_pin_cache
 
 
 async def search(inter: discord.Interaction, current: str) -> list[discord.app_commands.Choice[str]]:
     matches = sorted(
-        list({message.content[:100] async for message in inter.channel.pins(limit=None)
-              if message.content and closeness(current.lower(), message.content.lower())}),
+        list({message for message in (await get_pin_cache(inter.channel)).messages
+              if closeness(current.lower(), message.lower())}),
         key=lambda c: -closeness(current.lower(), c.lower())
     )
     return [discord.app_commands.Choice(name=g, value=g) for g in matches][:25]

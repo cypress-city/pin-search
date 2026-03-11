@@ -1,5 +1,5 @@
 import discord
-from discord.ext import commands
+from discord.ext import commands, tasks
 
 
 _COGS = [
@@ -10,6 +10,26 @@ _COGS = [
 
 def closeness(search_term: str, match: str) -> int:
     return 2 if match.startswith(search_term) else 1 if search_term in match else 0
+
+
+class PinCache:
+    def __init__(self, messages: list[str]):
+        self.messages = messages
+
+    @staticmethod
+    async def from_channel(channel: discord.TextChannel):
+        return PinCache(
+            [message.content[:100] async for message in channel.pins(limit=None) if message.content]
+        )
+
+
+async def get_pin_cache(channel: discord.TextChannel) -> PinCache:
+    if channel.id not in pin_cache:
+        pin_cache[channel.id] = await PinCache.from_channel(channel)
+    return pin_cache[channel.id]
+
+
+pin_cache: dict[int, PinCache] = {}
 
 
 class Bot(commands.Bot):  # main bot class
@@ -25,3 +45,7 @@ class Bot(commands.Bot):  # main bot class
     async def setup_hook(self) -> None:
         for extension in _COGS:
             await self.load_extension(extension)
+
+    @tasks.loop(minutes=10)
+    async def clear_cache(self):
+        pin_cache.clear()
