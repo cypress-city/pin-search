@@ -45,6 +45,7 @@ class Bot(commands.Bot):  # main bot class
     async def setup_hook(self) -> None:
         for extension in _COGS:
             await self.load_extension(extension)
+        self.clear_cache.start()
 
     @tasks.loop(minutes=10)
     async def clear_cache(self):
